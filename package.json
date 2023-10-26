@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "axios": "^1.5.1",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "puppeteer": "^21.4.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "examjs",
+  "version": "1.0.0",
+  "description": "Проект для ознакомления с парсингом",
+  "main": "main.js",
+  "keywords": [
+    "Counterpick"
+  ],
+  "author": "Artur Kondratev",
+  "license": "MIT"
+}

@@ -1,0 +1,17 @@
+/* Стилизация элементов страницы */
+.heroes {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.selected-heroes {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.counter-picks {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Добавь другие стили по желанию */
