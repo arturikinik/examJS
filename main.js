@@ -1,5 +1,8 @@
-// Получаем ссылку на кнопку с id 'getDataButton'
+// Получаем ссылку на кнопку 'Получить свежие данные о героях'
 const getDataButton = document.getElementById('getDataButton');
+
+// Получаем ссылку на кнопку для контрпиков
+const getCounterPicksButton = document.getElementById('getCounterPicksButton');
 
 // Получаем ссылку на элемент с id 'heroesTableBody'
 const heroesTableBody = document.getElementById('heroesTableBody');
@@ -13,7 +16,7 @@ const imageWidth = 42;
 // Задаем высоту изображения
 const imageHeight = 62;
 
-// Максимальное количество выбранных изображений
+// Максимальное количество выбранных изображений героев
 const MAX_SELECTED_HEROES = 5;
 
 // Массив для хранения выбранных изображений и их id
@@ -95,25 +98,30 @@ getDataButton.addEventListener('click', async () => {
 
 // Функция для добавления выбранного героя
 function addSelectedHero(hero) {
+    // Проверяем, что количество выбранных героев не превысило максимальное значение
     if (selectedHeroes.length < MAX_SELECTED_HEROES) {
-        // Проверяем, что не превышено максимальное количество выбранных героев
+        // Получаем URL изображения героя
         const imageUrl = hero.imageUrl;
         // Проверяем, что данное изображение ещё не выбрано
         if (!selectedHeroes.some(selectedHero => selectedHero.image.src === imageUrl)) {
+            // Создаем DOM элемент изображения для выбранного героя
             const selectedHeroImage = document.createElement('img');
             selectedHeroImage.src = imageUrl;
             selectedHeroImage.width = imageWidth;
             selectedHeroImage.height = imageHeight;
+            // Добавляем ID героя как data-атрибут к элементу
+            selectedHeroImage.setAttribute('data-hero-id', hero.id);
 
             // Добавляем обработчик события для выбранного изображения
             selectedHeroImage.addEventListener('click', () => {
+                // При клике на изображение можно выполнить дополнительные действия
                 removeSelectedHero(selectedHeroImage, hero.id);
             });
 
-            // Добавляем выбранное изображение в контейнер
+            // Добавляем выбранное изображение в контейнер на странице
             selectedHeroesContainer.appendChild(selectedHeroImage);
 
-            // Добавляем выбранного героя в массив
+            // Добавляем информацию о выбранном герое (ID и изображение) в массив
             selectedHeroes.push({ id: hero.id, image: selectedHeroImage });
         }
     }
@@ -127,3 +135,26 @@ function removeSelectedHero(selectedHeroImage, heroId) {
     // Удаляем выбранного героя из массива
     selectedHeroes = selectedHeroes.filter(hero => hero.id !== heroId);
 }
+
+// Добавляем обработчик события на кнопку 'Получить контрпики'
+getCounterPicksButton.addEventListener('click', async () => {
+    try {
+        if (selectedHeroes.length > 0) {
+            // Получим ID первого выбранного героя
+            const heroId = selectedHeroes[0].id;
+
+            // Вызываем функцию для получения контрпиков
+            const response = await fetch(`/getCounterPicks/${heroId}`);
+            
+            // Проверяем, является ли ответ валидным JSON
+            const responseData = await response.json();
+            console.log('Полученные контрпики для героя с ID', heroId, ':', responseData);
+        } else {
+            console.log('Выберите героя, чтобы получить контрпики.');
+        }
+    } catch (error) {
+        console.error('Произошла ошибка при запросе контрпиков:', error);
+        // Здесь вы можете обработать ошибку, например, показав сообщение об ошибке на странице
+    }
+});
+
